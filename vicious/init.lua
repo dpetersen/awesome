@@ -46,6 +46,11 @@ require("vicious.mpd")
 require("vicious.volume")
 require("vicious.weather")
 require("vicious.date")
+
+-- Copies of the gmail script that I'll gitignore to avoid storing my passwords...
+-- TODO:  Figure out a better way to do this one
+require("vicious.donpetersendotnet")
+require("vicious.milclandotcom")
 -- }}}
 
 -- Vicious: widgets for the awesome window manager

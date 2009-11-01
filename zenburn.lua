@@ -39,6 +39,8 @@ theme.fg_netup_widget  = "#7F9F7F"
 theme.fg_netdn_widget  = "#CC9393"
 theme.bg_widget        = "#3F3F3F"
 theme.border_widget    = "#3F3F3F"
+theme.fg_milclandotcom_widget  = "#CC9393"
+theme.fg_donpetersendotnet_widget  = "#7F9F7F"
 -- }}}
 -- }}}
 

@@ -69,7 +69,7 @@ vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %l:%M%P")
 pacmanicon = widget({ type = "imagebox" })
 pacmanicon.image = image(beautiful.widget_pacman)
 pacmanwidget = widget({ type = "textbox" })
-vicious.register(pacmanwidget, vicious.widgets.pacman, "$1", 3601)
+vicious.register(pacmanwidget, vicious.widgets.pacman, "$1", 3650)
 -- }}}
 
 -- {{{ Weather
@@ -90,6 +90,21 @@ local netwidget = widget({ type = "textbox" })
 vicious.register(netwidget, vicious.widgets.net, '<span color="'
   .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
   .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
+-- }}}
+
+-- {{{ donpetersen.net Mail
+donpetersendotneticon = widget({ type = "imagebox" })
+donpetersendotneticon.image = image(beautiful.widget_mail)
+donpetersendotnetwidget = widget({ type = "textbox" })
+vicious.register(donpetersendotnetwidget, vicious.widgets.donpetersendotnet,
+  '<span color="' .. beautiful.fg_donpetersendotnet_widget .. '">${count}</span>', 650)
+-- }}}
+
+-- {{{ milclan.com Mail
+milclandotcomwidget = widget({ type = "textbox" })
+vicious.register(milclandotcomwidget, vicious.widgets.milclandotcom,
+  '<span color="' .. beautiful.fg_normal .. '">|</span>'
+  .. '<span color="' .. beautiful.fg_milclandotcom_widget .. '">${count}</span>', 600)
 -- }}}
 
 -- {{{ Systray
@@ -134,6 +149,8 @@ for s = 1, screen.count() do
       weatherwidget, weathericon, separator,
       pacmanwidget, pacmanicon, separator,
       upicon, netwidget, dnicon, separator,
+      milclandotcomwidget,
+      donpetersendotnetwidget, donpetersendotneticon, separator,
       system_tray,
       layout = awful.widget.layout.horizontal.rightleft
     } or nil,

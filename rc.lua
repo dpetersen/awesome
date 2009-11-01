@@ -37,11 +37,6 @@ layouts = {
 -- {{{ Tags
 tags = {}
 
--- tags[1] = awful.tag({ "misc", "dev", "chat", "music" }, 1, awful.layout.suit.tile)
--- if screen.count() > 1 then
---   tags[2] = awful.tag({ "misc", "dev" }, 2, awful.layout.suit.tile)
--- end
-
 for s = 1, screen.count() do
   tags[s] = awful.tag({ "misc", "dev", "chat", "music" }, s, awful.layout.suit.tile)
 end

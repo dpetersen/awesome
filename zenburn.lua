@@ -2,6 +2,7 @@
 
 -- {{{ Main
 theme = {}
+theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/zenburn/zenburn-background.png" }
 theme.confdir       = awful.util.getdir("config")
 -- }}}
 

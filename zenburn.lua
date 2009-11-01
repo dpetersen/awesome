@@ -7,7 +7,7 @@ theme.confdir       = awful.util.getdir("config")
 
 -- {{{ Styles
 theme.font      = "Profont 8"
-theme.statusbar_height = 18
+theme.statusbar_height = 14
 
 -- {{{ Colors
 theme.fg_normal = "#DCDCCC"
@@ -19,9 +19,9 @@ theme.bg_urgent = "#3F3F3F"
 -- }}}
 
 -- {{{ Borders
-theme.border_width  = "1"
+theme.border_width  = "2"
 theme.border_normal = "#3F3F3F"
-theme.border_focus  = "#6F6F6F"
+theme.border_focus = "#CC9393"
 theme.border_marked = "#CC9393"
 -- }}}
 
@@ -73,9 +73,9 @@ theme.widget_net    = theme.confdir .. "/icons/down.png"
 theme.widget_netup  = theme.confdir .. "/icons/up.png"
 theme.widget_mail   = theme.confdir .. "/icons/mail.png"
 theme.widget_vol    = theme.confdir .. "/icons/vol.png"
-theme.widget_org    = theme.confdir .. "/icons/cal.png"
 theme.widget_date   = theme.confdir .. "/icons/time.png"
-theme.widget_crypto = theme.confdir .. "/icons/crypto.png"
+theme.widget_pacman = theme.confdir .. "/icons/pacman.png"
+theme.widget_weather = theme.confdir .. "/icons/temp.png"
 -- }}}
 
 -- {{{ Titlebar icons

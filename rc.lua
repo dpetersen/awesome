@@ -49,7 +49,54 @@ end
 
 -- {{{ Top Wibox
 
+-- {{{ Widgets
+
+-- {{{ Reusable separators
+local spacer = widget({ type = "textbox" })
+spacer.text  = "  "
+local separator = widget({ type = "textbox" })
+separator.text  = "  "
+-- }}}
+
+-- {{{ Date
+dateicon = widget({ type = "imagebox" })
+dateicon.image = image(beautiful.widget_date)
+datewidget = widget({ type = "textbox" })
+vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %l:%M%P")
+-- }}}
+
+-- {{{ Pacman
+pacmanicon = widget({ type = "imagebox" })
+pacmanicon.image = image(beautiful.widget_pacman)
+pacmanwidget = widget({ type = "textbox" })
+vicious.register(pacmanwidget, vicious.widgets.pacman, "$1", 3601)
+-- }}}
+
+-- {{{ Weather
+weathericon = widget({ type = "imagebox" })
+weathericon.image = image(beautiful.widget_weather)
+weatherwidget = widget({ type = "textbox" })
+vicious.register(weatherwidget, vicious.widgets.weather, "${tempf}° ${sky}", 3600, airport_code)
+-- }}}
+
+-- {{{ Network usage
+local dnicon = widget({ type = "imagebox" })
+local upicon = widget({ type = "imagebox" })
+dnicon.image = image(beautiful.widget_net)
+upicon.image = image(beautiful.widget_netup)
+-- Initialize widget
+local netwidget = widget({ type = "textbox" })
+-- Register widget
+vicious.register(netwidget, vicious.widgets.net, '<span color="'
+  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
+  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
+-- }}}
+
+-- {{{ Systray
 system_tray = widget({ type = "systray" })
+-- }}}
+
+-- }}}
 
 topwibox = {}
 promptbox = {}
@@ -58,15 +105,6 @@ taglist = {}
 taglist.buttons = awful.util.table.join(
   awful.button({ }, 1, awful.tag.viewonly),
   awful.button({ }, 3, awful.tag.viewtoggle))
-
-datewidget = widget({ type = "textbox" })
-vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %l:%M%P")
-
-weatherwidget = widget({ type = "textbox" })
-vicious.register(weatherwidget, vicious.widgets.weather, "${tempf}° ${sky}", 3600, airport_code)
-
-pacmanwidget = widget({ type = "textbox" })
-vicious.register(pacmanwidget, vicious.widgets.pacman, "Updates: $1", 3601)
 
 for s = 1, screen.count() do
   taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
@@ -77,21 +115,28 @@ for s = 1, screen.count() do
     awful.button({ }, 1, function () awful.layout.inc(layouts, 1) end),
     awful.button({ }, 3, function () awful.layout.inc(layouts, -1) end)))
 
-  topwibox[s] = awful.wibox({ position = "top", screen = s, fg = beautiful.fg_normal, bg = beautiful.bg_normal, height = beautiful.statusbar_height })
+  topwibox[s] = awful.wibox({
+    position = "top", screen = s,
+    fg = beautiful.fg_normal, bg = beautiful.bg_normal, height = beautiful.statusbar_height
+  })
+
   topwibox[s].widgets = {
     {
       taglist[s],
+      layoutbox[s],
+      spacer,
       promptbox[s],
       layout = awful.widget.layout.horizontal.leftright
     },
-    {
-      layoutbox[s],
-      s == 1 and datewidget or nil,
-      s == 1 and weatherwidget or nil,
-      s == 1 and pacmanwidget or nil,
-      s == 1 and system_tray or nil,
+    s == 1 and {
+      spacer,
+      datewidget, dateicon, separator,
+      weatherwidget, weathericon, separator,
+      pacmanwidget, pacmanicon, separator,
+      upicon, netwidget, dnicon, separator,
+      system_tray,
       layout = awful.widget.layout.horizontal.rightleft
-    },
+    } or nil,
     layout = awful.widget.layout.horizontal.leftright
   }
 end

@@ -23,6 +23,8 @@ editor = "vim"
 
 airport_code = "KATW"
 
+low_battery_threshold = 60
+
 -- Default modkey.
 modkey = "Mod4"
 altkey = "Mod1"
@@ -128,6 +130,38 @@ vicious.register(milclandotcomwidget, vicious.widgets.milclandotcom,
   .. '<span color="' .. beautiful.fg_milclandotcom_widget .. '">${count}</span>', 600)
 -- }}}
 
+-- {{{ Power
+powerseparator = widget({ type = "textbox" })
+powerseparator.text  = "  "
+powericon = widget({ type = "imagebox" })
+powericon.image = image(beautiful.widget_power)
+powerwidget = widget({ type = "textbox" })
+vicious.register(powerwidget, vicious.widgets.bat,
+  function(widget, args)
+    local on_battery = (args[1] == "-")
+    local percent = args[2]
+    local time = args[3]
+
+    if on_battery then
+      powerseparator.visible = true
+      powericon.visible = true
+
+      if percent < low_battery_threshold then return percent .. "% " .. time
+      else return percent .. "%"
+      end
+    else
+      if percent < low_battery_threshold then
+        powerseparator.visible = true
+        powericon.visible = true
+        return "↯ " .. percent .. "% " .. time
+      else
+        powerseparator.visible = false
+        powericon.visible = false
+      end
+    end
+  end, 300, "BAT0")
+-- }}}
+
 -- {{{ Systray
 system_tray = widget({ type = "systray" })
 -- }}}
@@ -172,6 +206,7 @@ for s = 1, screen.count() do
       upicon, netwidget, dnicon, separator,
       milclandotcomwidget,
       donpetersendotnetwidget, donpetersendotneticon, separator,
+      powerwidget, powericon, powerseparator,
       system_tray,
       layout = awful.widget.layout.horizontal.rightleft
     } or nil,

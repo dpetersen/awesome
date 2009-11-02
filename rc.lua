@@ -59,7 +59,7 @@ separator.text  = "  "
 dateicon = widget({ type = "imagebox" })
 dateicon.image = image(beautiful.widget_date)
 datewidget = widget({ type = "textbox" })
-vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %l:%M%P")
+vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %I:%M%P")
 -- }}}
 
 -- {{{ Pacman

@@ -51,8 +51,6 @@ end
 -- {{{ Widgets
 
 -- {{{ Reusable separators
-local spacer = widget({ type = "textbox" })
-spacer.text  = "  "
 local separator = widget({ type = "textbox" })
 separator.text  = "  "
 -- }}}
@@ -68,7 +66,23 @@ vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %l:%M%P")
 pacmanicon = widget({ type = "imagebox" })
 pacmanicon.image = image(beautiful.widget_pacman)
 pacmanwidget = widget({ type = "textbox" })
-vicious.register(pacmanwidget, vicious.widgets.pacman, "$1", 3650)
+pacmanseparator = widget({ type = "textbox" })
+pacmanseparator.text  = "  "
+vicious.register(pacmanwidget, vicious.widgets.pacman,
+  function(widget, args)
+    local number = tonumber(args[1])
+    if number > 0 then
+      pacmanicon.visible = true
+      pacmanwidget.visible = true
+      pacmanseparator.visible = true
+      return number
+    else
+      pacmanicon.visible = false
+      pacmanwidget.visible = false
+      pacmanseparator.visible = false
+    end
+  end,
+  3650)
 -- }}}
 
 -- {{{ Weather
@@ -83,12 +97,21 @@ local dnicon = widget({ type = "imagebox" })
 local upicon = widget({ type = "imagebox" })
 dnicon.image = image(beautiful.widget_net)
 upicon.image = image(beautiful.widget_netup)
--- Initialize widget
 local netwidget = widget({ type = "textbox" })
--- Register widget
-vicious.register(netwidget, vicious.widgets.net, '<span color="'
-  .. beautiful.fg_netdn_widget ..'">${wlan0 down_kb}</span> <span color="'
-  .. beautiful.fg_netup_widget ..'">${wlan0 up_kb}</span>', 3)
+vicious.register(netwidget, vicious.widgets.net,
+  function(widget, args)
+    local format_speed = function(max, s)
+      local n = tonumber(s)
+      if n < max then return 0
+      else return math.floor(n)
+      end
+    end
+
+    return '<span color="' .. beautiful.fg_netdn_widget ..'">'
+      .. format_speed(25, args["{wlan0 down_kb}"]) .. '</span>'
+      .. ' <span color="' .. beautiful.fg_netup_widget ..'">'
+      .. format_speed(5, args["{wlan0 up_kb}"]) .. '</span>'
+  end, 3)
 -- }}}
 
 -- {{{ donpetersen.net Mail
@@ -138,15 +161,15 @@ for s = 1, screen.count() do
     {
       taglist[s],
       layoutbox[s],
-      spacer,
+      separator,
       promptbox[s],
       layout = awful.widget.layout.horizontal.leftright
     },
     s == 1 and {
-      spacer,
+      separator,
       datewidget, dateicon, separator,
       weatherwidget, weathericon, separator,
-      pacmanwidget, pacmanicon, separator,
+      pacmanwidget, pacmanicon, pacmanseparator,
       upicon, netwidget, dnicon, separator,
       milclandotcomwidget,
       donpetersendotnetwidget, donpetersendotneticon, separator,

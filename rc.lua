@@ -166,6 +166,13 @@ vicious.register(powerwidget, vicious.widgets.bat,
 system_tray = widget({ type = "systray" })
 -- }}}
 
+-- {{{ Wifi
+wifiicon = widget({ type = "imagebox" })
+wifiicon.image = image(beautiful.widget_wifi)
+wifiwidget = widget({ type = "textbox" })
+vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid}[${link}]", 33, "wlan0")
+-- }}}
+
 -- }}}
 
 topwibox = {}
@@ -202,11 +209,12 @@ for s = 1, screen.count() do
       separator,
       datewidget, dateicon, separator,
       weatherwidget, weathericon, separator,
-      pacmanwidget, pacmanicon, pacmanseparator,
-      upicon, netwidget, dnicon, separator,
       milclandotcomwidget,
       donpetersendotnetwidget, donpetersendotneticon, separator,
+      upicon, netwidget, dnicon, separator,
+      wifiwidget, wifiicon, separator,
       powerwidget, powericon, powerseparator,
+      pacmanwidget, pacmanicon, pacmanseparator,
       system_tray,
       layout = awful.widget.layout.horizontal.rightleft
     } or nil,

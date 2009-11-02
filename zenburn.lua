@@ -80,6 +80,7 @@ theme.widget_date    = theme.confdir .. "/icons/time.png"
 theme.widget_pacman  = theme.confdir .. "/icons/pacman.png"
 theme.widget_weather = theme.confdir .. "/icons/temp.png"
 theme.widget_power   = theme.confdir .. "/icons/power.png"
+theme.widget_wifi    = theme.confdir .. "/icons/wifi.png"
 -- }}}
 
 -- {{{ Titlebar icons

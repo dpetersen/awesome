@@ -12,6 +12,10 @@ require("lib/mpd")
 -- Load theme
 beautiful.init(awful.util.getdir("config") .. "/zenburn.lua")
 
+per_screen_tags = {}
+per_screen_tags[1] = { "misc", "dev", "chat", "music" }
+per_screen_tags[2] = { "misc", "dev" }
+
 -- This is used later as the default terminal and editor to run.
 terminal = "terminal"
 browser = "uzbl"
@@ -38,7 +42,7 @@ layouts = {
 tags = {}
 
 for s = 1, screen.count() do
-  tags[s] = awful.tag({ "misc", "dev", "chat", "music" }, s, awful.layout.suit.tile)
+  tags[s] = awful.tag(per_screen_tags[s], s, awful.layout.suit.tile)
 end
 -- }}}
 

@@ -173,6 +173,32 @@ wifiwidget = widget({ type = "textbox" })
 vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid}[${link}]", 33, "wlan0")
 -- }}}
 
+-- {{{ MPD
+mpdseparator = widget({ type = "textbox" })
+mpdseparator.text  = "  "
+mpdicon = widget({ type = "imagebox" })
+mpdicon.image = image(beautiful.widget_music)
+mpdwidget = widget({ type = "textbox" })
+vicious.register(mpdwidget, vicious.widgets.mpd_extended,
+  function(widget, args)
+    if args["{status}"] == "playing" then
+      return '<span color="' .. beautiful.fg_mpd_playing .. '">' ..args["{now_playing}"]
+        .. " " .. args["{current_time}"] .. "/" .. args["{total_time}"] .. '</span>'
+    else
+      return '<span color="' .. beautiful.fg_mpd_paused .. '">'
+        .. args["{now_playing}"] .. '</span>'
+    end
+  end
+)
+-- }}}
+
+--- {{{ Volume
+volumeicon = widget({ type = "imagebox" })
+volumeicon.image = image(beautiful.widget_vol)
+volumewidget = widget({ type = "textbox" })
+vicious.register(volumewidget, vicious.widgets.volume, "$1", 3, "PCM")
+--- }}}
+
 -- }}}
 
 topwibox = {}
@@ -215,110 +241,14 @@ for s = 1, screen.count() do
       wifiwidget, wifiicon, separator,
       powerwidget, powericon, powerseparator,
       pacmanwidget, pacmanicon, pacmanseparator,
+      volumewidget, volumeicon, separator,
+      mpdwidget, mpdicon, mpdseparator,
       system_tray,
       layout = awful.widget.layout.horizontal.rightleft
     } or nil,
     layout = awful.widget.layout.horizontal.leftright
   }
 end
--- }}}
-
--- {{{ Bottom Wibox
-
--- {{{ MPD Widget
--- (need the mpd lib for lua)
-
-last_songid = nil
-mpd.scroll  = 0
-function mpd_widget_text()
-  local function timeformat(t)
-    if tonumber(t) >= 60 * 60 then -- more than one hour !
-      return os.date("%X", t)
-    else
-      return os.date("%M:%S", t)
-    end
-  end
-
-  local function unknowize(x)
-    return awful.util.escape(x or "(unknown)")
-  end
-
-  local now_playing, status, total_time, current_time
-  local stats = mpd.send("status")
-
-  if not stats.state then
-    return "MPD not launched?"
-  end
-
-  if stats.state == "stop" then
-    last_songid = false
-    return ""
-  end
-
-  local zstats = mpd.send("playlistid " .. stats.songid)
-  now_playing = string.format("%s - %s - %s",
-  unknowize(zstats.artist), unknowize(zstats.album), unknowize(zstats.title))
-
-  if stats.state ~= "play" then
-    now_playing = now_playing .. " (" .. stats.state .. ")"
-  end
-
-  current_time   = timeformat(stats.time:match("(%d+):"))
-  total_time     = timeformat(stats.time:match("%d+:(%d+)"))
-
-  if use_naughty then
-    if not last_songid or last_songid ~= stats.songid then
-      last_songid = stats.songid
-      naughty.notify {
-        text = string.format("%s: %s\n%s:  %s\n%s: %s",
-        bold("artist"), unknowize(zstats.artist),
-        bold("album"),  unknowize(zstats.album),
-        bold("title"),  unknowize(zstats.title)),
-        width = 280,
-        timeout = 6
-      }
-    end
-  end
-
-  return "now playing: " .. now_playing .. " - " .. current_time .. "/" .. total_time .. " vol: " .. stats.volume
-end
-
--- }}}
-
--- {{{  Mutt Widget
-previous_unread_mail_count = 0
-function mutt_widget_text(count)
-  count = tonumber(count)
-  if count == 0 then
-    muttwidget.text = ""
-  else
-    muttwidget.text = "Mail: " .. count
-  end
-
-  if previous_unread_mail_count == 0 and count > 0 then
-    naughty.notify({ text = "You have new mail!", timeout = 15, bg = "red" })
-  end
-end
--- }}}
-
-dividerwidget = widget({ type = "textbox" })
-dividerwidget.text = " // "
-
-spacerwidget = widget({ type = "textbox" })
-spacerwidget.text = "  "
-
-mpdwidget = widget { type = "textbox" }
-muttwidget = widget { type = "textbox" }
-
-bottom_wibox = awful.wibox({ position = "bottom", fg = beautiful.fg_normal, bg = beautiful.bg_normal, height = beautiful.statusbar_height })
-bottom_wibox.widgets = {
-  {
-    spacerwidget,
-    layout = awful.widget.layout.horizontal.leftright
-  },
-  muttwidget, mpdwidget,
-  layout = awful.widget.layout.horizontal.rightleft
-}
 -- }}}
 
 -- {{{ Key bindings
@@ -494,12 +424,6 @@ end)
 
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-
-second_timer = timer { timeout = 1 }
-second_timer:add_signal("timeout", function()
-  mpdwidget.text = mpd_widget_text()
-end)
-second_timer:start()
 -- }}}
 
 -- vim: ft=lua:ai:sw=2:sts=2:ts=2:et

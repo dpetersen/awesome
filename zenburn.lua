@@ -42,6 +42,8 @@ theme.bg_widget        = "#3F3F3F"
 theme.border_widget    = "#3F3F3F"
 theme.fg_milclandotcom_widget  = "#CC9393"
 theme.fg_donpetersendotnet_widget  = "#7F9F7F"
+theme.fg_mpd_paused    = "#7F9F7F"
+theme.fg_mpd_playing   = "#F0DFAF"
 -- }}}
 -- }}}
 
@@ -81,6 +83,7 @@ theme.widget_pacman  = theme.confdir .. "/icons/pacman.png"
 theme.widget_weather = theme.confdir .. "/icons/temp.png"
 theme.widget_power   = theme.confdir .. "/icons/power.png"
 theme.widget_wifi    = theme.confdir .. "/icons/wifi.png"
+theme.widget_music   = theme.confdir .. "/icons/music.png"
 -- }}}
 
 -- {{{ Titlebar icons

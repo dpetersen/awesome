@@ -47,6 +47,9 @@ require("vicious.volume")
 require("vicious.weather")
 require("vicious.date")
 
+-- Add play/pause and seconds
+require("vicious.mpd_extended")
+
 -- Copies of the gmail script that I'll gitignore to avoid storing my passwords...
 -- TODO:  Figure out a better way to do this one
 require("vicious.donpetersendotnet")

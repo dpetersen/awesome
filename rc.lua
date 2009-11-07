@@ -47,7 +47,7 @@ for s = 1, screen.count() do
 end
 -- }}}
 
--- {{{ Top Wibox
+-- {{{ Wibox
 
 -- {{{ Widgets
 -- {{{ Reusable separators
@@ -219,12 +219,24 @@ vicious.register(mpdwidget, vicious.widgets.mpd_extended,
 )
 -- }}}
 
---- {{{ Volume
-volumeicon = widget({ type = "imagebox" })
+-- {{{ Volume
+local volumeicon = widget({ type = "imagebox" })
 volumeicon.image = image(beautiful.widget_vol)
-volumewidget = widget({ type = "textbox" })
-vicious.register(volumewidget, vicious.widgets.volume, "$1", 3, "PCM")
---- }}}
+local volumebar = awful.widget.progressbar()
+
+volumebar:set_width(4)
+volumebar:set_height(14)
+volumebar:set_vertical(true)
+volumebar:set_background_color(beautiful.fg_off_widget)
+volumebar:set_border_color(nil)
+volumebar:set_color(beautiful.fg_widget)
+volumebar:set_gradient_colors({ beautiful.fg_widget,
+    beautiful.fg_center_widget, beautiful.fg_end_widget })
+
+vicious.enable_caching(vicious.widgets.volume)
+
+vicious.register(volumebar, vicious.widgets.volume, "$1",  2, "PCM")
+-- }}}
 
 -- {{{ CPU
 cpuicon = widget({ type = "imagebox" })
@@ -275,7 +287,7 @@ for s = 1, screen.count() do
     s == 1 and {
       system_tray, separator,
       mpdicon, mpdwidget, mpdseparator,
-      volumeicon, volumewidget, separator,
+      volumeicon, volumebar, separator,
       powericon, powerwidget, powerseparator,
       wifiicon, wifiwidget, separator,
       pacmanicon, pacmanwidget, pacmanseparator,
@@ -287,22 +299,6 @@ for s = 1, screen.count() do
       dateicon, datewidget, separator,
       layout = awful.widget.layout.horizontal.rightleft
     } or nil,
-    -- s == 1 and {
-    --   separator,
-    --   datewidget, dateicon, separator,
-    --   weatherwidget, weathericon, separator,
-    --   milclandotcomwidget,
-    --   donpetersendotnetwidget, mailicon, mailseparator,
-    --   upicon, netwidget, dnicon, separator,
-    --   cpugraph, cpuicon, separator,
-    --   wifiwidget, wifiicon, separator,
-    --   powerwidget, powericon, powerseparator,
-    --   pacmanwidget, pacmanicon, pacmanseparator,
-    --   volumewidget, volumeicon, separator,
-    --   mpdwidget, mpdicon, mpdseparator,
-    --   system_tray,
-    --   layout = awful.widget.layout.horizontal.rightleft
-    -- } or nil,
     layout = awful.widget.layout.horizontal.leftright
   }
 end

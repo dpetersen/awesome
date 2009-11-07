@@ -50,15 +50,20 @@ end
 -- {{{ Wibox
 
 -- {{{ Widgets
+local textwidgets = {}
+
 -- {{{ Reusable separators
 local separator = widget({ type = "textbox" })
 separator.text  = "  "
+local tiny_separator = widget({ type = "textbox" })
+tiny_separator.text  = " "
 -- }}}
 
 -- {{{ Date
 dateicon = widget({ type = "imagebox" })
 dateicon.image = image(beautiful.widget_date)
 datewidget = widget({ type = "textbox" })
+table.insert(textwidgets, datewidget)
 vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %I:%M%P")
 -- }}}
 
@@ -66,6 +71,7 @@ vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %I:%M%P")
 pacmanicon = widget({ type = "imagebox" })
 pacmanicon.image = image(beautiful.widget_pacman)
 pacmanwidget = widget({ type = "textbox" })
+table.insert(textwidgets, pacmanwidget)
 pacmanseparator = widget({ type = "textbox" })
 pacmanseparator.text  = "  "
 vicious.register(pacmanwidget, vicious.widgets.script, 
@@ -88,6 +94,7 @@ vicious.register(pacmanwidget, vicious.widgets.script,
 weathericon = widget({ type = "imagebox" })
 weathericon.image = image(beautiful.widget_weather)
 weatherwidget = widget({ type = "textbox" })
+table.insert(textwidgets, weatherwidget)
 vicious.register(weatherwidget, vicious.widgets.weather, "${tempf}° ${sky}", 3600, airport_code)
 -- }}}
 
@@ -97,6 +104,7 @@ local upicon = widget({ type = "imagebox" })
 dnicon.image = image(beautiful.widget_net)
 upicon.image = image(beautiful.widget_netup)
 local netwidget = widget({ type = "textbox" })
+table.insert(textwidgets, netwidget)
 vicious.register(netwidget, vicious.widgets.net,
   function(widget, args)
     local format_speed = function(max, s)
@@ -123,7 +131,9 @@ mailicon = widget({ type = "imagebox" })
 mailicon.image = image(beautiful.widget_mail)
 
 donpetersendotnetwidget = widget({ type = "textbox" })
+table.insert(textwidgets, donpetersendotnetwidget)
 milclandotcomwidget = widget({ type = "textbox" })
+table.insert(textwidgets, milclandotcomwidget)
 
 check_mail_widgets = function()
   if donpetersendotnet_unread == 0 and milclandotcomunread_unread == 0 then
@@ -163,6 +173,7 @@ powerseparator.text  = "  "
 powericon = widget({ type = "imagebox" })
 powericon.image = image(beautiful.widget_power)
 powerwidget = widget({ type = "textbox" })
+table.insert(textwidgets, powerwidget)
 vicious.register(powerwidget, vicious.widgets.bat,
   function(widget, args)
     local on_battery = (args[1] == "-")
@@ -197,6 +208,7 @@ system_tray = widget({ type = "systray" })
 wifiicon = widget({ type = "imagebox" })
 wifiicon.image = image(beautiful.widget_wifi)
 wifiwidget = widget({ type = "textbox" })
+table.insert(textwidgets, wifiwidget)
 vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid}[${link}]", 33, "wlan0")
 -- }}}
 
@@ -206,6 +218,7 @@ mpdseparator.text  = "  "
 mpdicon = widget({ type = "imagebox" })
 mpdicon.image = image(beautiful.widget_music)
 mpdwidget = widget({ type = "textbox" })
+table.insert(textwidgets, mpdwidget)
 
 mpdprogressbar = awful.widget.progressbar()
 mpdprogressbar:set_width(4)
@@ -267,6 +280,27 @@ cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
     beautiful.fg_center_widget, beautiful.fg_widget })
 vicious.register(cpugraph, vicious.widgets.cpu, "$1")
 -- }}}
+
+-- {{{ Memory usage
+local membar = awful.widget.progressbar()
+membar:set_width(6)
+membar:set_height(14)
+membar:set_vertical(true)
+membar:set_background_color(beautiful.fg_off_widget)
+membar:set_border_color(nil)
+membar:set_border_color(beautiful.border_widget)
+membar:set_color(beautiful.fg_widget)
+membar:set_gradient_colors({ beautiful.fg_widget,
+    beautiful.fg_center_widget, beautiful.fg_end_widget })
+
+vicious.register(membar, vicious.widgets.mem, "$1", 13)
+-- }}}
+
+-- {{{ Vertical margins for text widgets
+for i,w in ipairs(textwidgets) do
+  awful.widget.layout.margins[w] = { top = 1 }
+end
+-- }}}
 -- }}}
 
 topwibox = {}
@@ -301,14 +335,14 @@ for s = 1, screen.count() do
     },
     s == 1 and {
       system_tray, separator,
-      mpdicon, mpdwidget, mpdprogressbar, mpdseparator,
+      mpdicon, mpdwidget, tiny_separator, mpdprogressbar, mpdseparator,
       volumeicon, volumebar, separator,
       powericon, powerwidget, powerseparator,
       wifiicon, wifiwidget, separator,
       pacmanicon, pacmanwidget, pacmanseparator,
       mailicon, donpetersendotnetwidget,
       milclandotcomwidget, mailseparator,
-      cpuicon, cpugraph, separator,
+      cpuicon, cpugraph, tiny_separator, membar, separator,
       dnicon, netwidget, upicon, separator,
       weathericon, weatherwidget, separator,
       dateicon, datewidget, separator,

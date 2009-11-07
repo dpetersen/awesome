@@ -206,17 +206,32 @@ mpdseparator.text  = "  "
 mpdicon = widget({ type = "imagebox" })
 mpdicon.image = image(beautiful.widget_music)
 mpdwidget = widget({ type = "textbox" })
+
+mpdprogressbar = awful.widget.progressbar()
+mpdprogressbar:set_width(4)
+mpdprogressbar:set_height(14)
+mpdprogressbar:set_vertical(true)
+mpdprogressbar:set_background_color(beautiful.fg_off_widget)
+mpdprogressbar:set_border_color(nil)
+mpdprogressbar:set_color(beautiful.fg_widget)
+mpdprogressbar:set_gradient_colors({ beautiful.fg_widget,
+    beautiful.fg_center_widget, beautiful.fg_end_widget })
+
+vicious.enable_caching(vicious.widgets.mpd_extended)
+
 vicious.register(mpdwidget, vicious.widgets.mpd_extended,
   function(widget, args)
     if args["{status}"] == "playing" then
-      return '<span color="' .. beautiful.fg_mpd_playing .. '">' ..args["{now_playing}"]
-        .. " " .. args["{current_time}"] .. "/" .. args["{total_time}"] .. '</span>'
+      return '<span color="' .. beautiful.fg_mpd_playing .. '">' 
+      .. args["{now_playing}"] .. " [" ..args["{time_left}"] .. ']</span>'
     else
       return '<span color="' .. beautiful.fg_mpd_paused .. '">'
         .. args["{now_playing}"] .. '</span>'
     end
   end
 )
+
+vicious.register(mpdprogressbar, vicious.widgets.mpd_extended, "${percentage}")
 -- }}}
 
 -- {{{ Volume
@@ -286,7 +301,7 @@ for s = 1, screen.count() do
     },
     s == 1 and {
       system_tray, separator,
-      mpdicon, mpdwidget, mpdseparator,
+      mpdicon, mpdwidget, mpdprogressbar, mpdseparator,
       volumeicon, volumebar, separator,
       powericon, powerwidget, powerseparator,
       wifiicon, wifiwidget, separator,

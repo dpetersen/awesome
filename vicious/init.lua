@@ -47,6 +47,9 @@ require("vicious.volume")
 require("vicious.weather")
 require("vicious.date")
 
+-- Run scripts in the awesome/scripts directory by name
+require("vicious.script")
+
 -- Add play/pause and seconds
 require("vicious.mpd_extended")
 

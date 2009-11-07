@@ -69,7 +69,7 @@ pacmanicon.image = image(beautiful.widget_pacman)
 pacmanwidget = widget({ type = "textbox" })
 pacmanseparator = widget({ type = "textbox" })
 pacmanseparator.text  = "  "
-vicious.register(pacmanwidget, vicious.widgets.pacman,
+vicious.register(pacmanwidget, vicious.widgets.script, 
   function(widget, args)
     local number = tonumber(args[1])
     if number > 0 then
@@ -82,8 +82,7 @@ vicious.register(pacmanwidget, vicious.widgets.pacman,
       pacmanwidget.visible = false
       pacmanseparator.visible = false
     end
-  end,
-  3650)
+  end, 3650, "system_updates.rb")
 -- }}}
 
 -- {{{ Weather

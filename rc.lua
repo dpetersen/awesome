@@ -114,19 +114,48 @@ vicious.register(netwidget, vicious.widgets.net,
   end, 3)
 -- }}}
 
--- {{{ donpetersen.net Mail
-donpetersendotneticon = widget({ type = "imagebox" })
-donpetersendotneticon.image = image(beautiful.widget_mail)
-donpetersendotnetwidget = widget({ type = "textbox" })
-vicious.register(donpetersendotnetwidget, vicious.widgets.donpetersendotnet,
-  '<span color="' .. beautiful.fg_donpetersendotnet_widget .. '">${count}</span>', 650)
--- }}}
+-- {{{ Mail
+milclandotcomunread_unread = 0
+donpetersendotnet_unread = 0
 
--- {{{ milclan.com Mail
+mailseparator = widget({ type = "textbox" })
+mailseparator.text  = "  "
+mailicon = widget({ type = "imagebox" })
+mailicon.image = image(beautiful.widget_mail)
+
+donpetersendotnetwidget = widget({ type = "textbox" })
 milclandotcomwidget = widget({ type = "textbox" })
+
+check_mail_widgets = function()
+  if donpetersendotnet_unread == 0 and milclandotcomunread_unread == 0 then
+    mailseparator.visible = false
+    mailicon.visible = false
+    donpetersendotnetwidget.visible = false
+    milclandotcomwidget.visible = false
+  else
+    mailseparator.visible = true
+    mailicon.visible = true
+    donpetersendotnetwidget.visible = true
+    milclandotcomwidget.visible = true
+  end
+end
+
+vicious.register(donpetersendotnetwidget, vicious.widgets.donpetersendotnet,
+  function(widget, args)
+    local count = tonumber(args["{count}"])
+    donpetersendotnet_unread = count
+    check_mail_widgets()
+    return '<span color="' .. beautiful.fg_donpetersendotnet_widget .. '">' .. count .. '</span>'
+  end, 330)
+
 vicious.register(milclandotcomwidget, vicious.widgets.milclandotcom,
-  '<span color="' .. beautiful.fg_normal .. '">|</span>'
-  .. '<span color="' .. beautiful.fg_milclandotcom_widget .. '">${count}</span>', 600)
+  function(widget, args)
+    local count = tonumber(args["{count}"])
+    milclandotcomunread_unread = count
+    check_mail_widgets()
+    return '<span color="' .. beautiful.fg_normal .. '">|</span>'
+      .. '<span color="' .. beautiful.fg_milclandotcom_widget .. '">' .. count .. '</span>'
+  end, 300)
 -- }}}
 
 -- {{{ Power
@@ -235,7 +264,7 @@ for s = 1, screen.count() do
       datewidget, dateicon, separator,
       weatherwidget, weathericon, separator,
       milclandotcomwidget,
-      donpetersendotnetwidget, donpetersendotneticon, separator,
+      donpetersendotnetwidget, mailicon, mailseparator,
       upicon, netwidget, dnicon, separator,
       wifiwidget, wifiicon, separator,
       powerwidget, powericon, powerseparator,

@@ -50,7 +50,6 @@ end
 -- {{{ Top Wibox
 
 -- {{{ Widgets
-
 -- {{{ Reusable separators
 local separator = widget({ type = "textbox" })
 separator.text  = "  "
@@ -227,6 +226,20 @@ volumewidget = widget({ type = "textbox" })
 vicious.register(volumewidget, vicious.widgets.volume, "$1", 3, "PCM")
 --- }}}
 
+-- {{{ CPU
+cpuicon = widget({ type = "imagebox" })
+cpuicon.image = image(beautiful.widget_cpu)
+
+cpugraph  = awful.widget.graph()
+cpugraph:set_width(14)
+cpugraph:set_height(14)
+cpugraph:set_background_color(beautiful.fg_off_widget)
+cpugraph:set_color(beautiful.fg_end_widget)
+cpugraph:set_gradient_angle(0)
+cpugraph:set_gradient_colors({ beautiful.fg_end_widget,
+    beautiful.fg_center_widget, beautiful.fg_widget })
+vicious.register(cpugraph, vicious.widgets.cpu, "$1")
+-- }}}
 -- }}}
 
 topwibox = {}
@@ -238,7 +251,7 @@ taglist.buttons = awful.util.table.join(
   awful.button({ }, 3, awful.tag.viewtoggle))
 
 for s = 1, screen.count() do
-  taglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, taglist.buttons)
+  taglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist.buttons)
   promptbox[s] = awful.widget.prompt()
 
   layoutbox[s] = awful.widget.layoutbox(s)
@@ -260,20 +273,36 @@ for s = 1, screen.count() do
       layout = awful.widget.layout.horizontal.leftright
     },
     s == 1 and {
-      separator,
-      datewidget, dateicon, separator,
-      weatherwidget, weathericon, separator,
-      milclandotcomwidget,
-      donpetersendotnetwidget, mailicon, mailseparator,
-      upicon, netwidget, dnicon, separator,
-      wifiwidget, wifiicon, separator,
-      powerwidget, powericon, powerseparator,
-      pacmanwidget, pacmanicon, pacmanseparator,
-      volumewidget, volumeicon, separator,
-      mpdwidget, mpdicon, mpdseparator,
-      system_tray,
+      system_tray, separator,
+      mpdicon, mpdwidget, mpdseparator,
+      volumeicon, volumewidget, separator,
+      powericon, powerwidget, powerseparator,
+      wifiicon, wifiwidget, separator,
+      pacmanicon, pacmanwidget, pacmanseparator,
+      mailicon, donpetersendotnetwidget,
+      milclandotcomwidget, mailseparator,
+      cpuicon, cpugraph, separator,
+      dnicon, netwidget, upicon, separator,
+      weathericon, weatherwidget, separator,
+      dateicon, datewidget, separator,
       layout = awful.widget.layout.horizontal.rightleft
     } or nil,
+    -- s == 1 and {
+    --   separator,
+    --   datewidget, dateicon, separator,
+    --   weatherwidget, weathericon, separator,
+    --   milclandotcomwidget,
+    --   donpetersendotnetwidget, mailicon, mailseparator,
+    --   upicon, netwidget, dnicon, separator,
+    --   cpugraph, cpuicon, separator,
+    --   wifiwidget, wifiicon, separator,
+    --   powerwidget, powericon, powerseparator,
+    --   pacmanwidget, pacmanicon, pacmanseparator,
+    --   volumewidget, volumeicon, separator,
+    --   mpdwidget, mpdicon, mpdseparator,
+    --   system_tray,
+    --   layout = awful.widget.layout.horizontal.rightleft
+    -- } or nil,
     layout = awful.widget.layout.horizontal.leftright
   }
 end

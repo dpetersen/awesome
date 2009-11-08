@@ -258,9 +258,11 @@ vicious.enable_caching(vicious.widgets.mpd_extended)
 vicious.register(mpdwidget, vicious.widgets.mpd_extended,
   function(widget, args)
     if args["{status}"] == "playing" then
+      mpdprogressbar.widget.visible = true
       return '<span color="' .. beautiful.fg_mpd_playing .. '">' 
       .. args["{now_playing}"] .. " [" ..args["{time_left}"] .. ']</span>'
     else
+      mpdprogressbar.widget.visible = false
       return '<span color="' .. beautiful.fg_mpd_paused .. '">'
         .. args["{now_playing}"] .. '</span>'
     end

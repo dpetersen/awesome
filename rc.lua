@@ -239,7 +239,6 @@ vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid}[${link}]", 33, "wlan
 mpdseparator = widget({ type = "textbox" })
 mpdseparator.text  = "  "
 mpdicon = widget({ type = "imagebox" })
-mpdicon.image = image(beautiful.widget_music)
 mpdwidget = widget({ type = "textbox" })
 table.insert(textwidgets, mpdwidget)
 
@@ -259,10 +258,12 @@ vicious.register(mpdwidget, vicious.widgets.mpd_extended,
   function(widget, args)
     if args["{status}"] == "playing" then
       mpdprogressbar.widget.visible = true
+      mpdicon.image = image(beautiful.widget_music)
       return '<span color="' .. beautiful.fg_mpd_playing .. '">' 
       .. args["{now_playing}"] .. " [" ..args["{time_left}"] .. ']</span>'
     else
       mpdprogressbar.widget.visible = false
+      mpdicon.image = image(beautiful.widget_pause)
       return '<span color="' .. beautiful.fg_mpd_paused .. '">'
         .. args["{now_playing}"] .. '</span>'
     end
@@ -360,7 +361,7 @@ for s = 1, screen.count() do
     },
     s == 1 and {
       system_tray, separator,
-      mpdicon, mpdwidget, tiny_separator, mpdprogressbar, mpdseparator,
+      mpdicon, tiny_separator, mpdwidget, tiny_separator, mpdprogressbar, mpdseparator,
       volumeicon, volumebar, separator,
       powericon, powerwidget, powerseparator,
       wifiicon, wifiwidget, separator,

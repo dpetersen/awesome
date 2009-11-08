@@ -84,6 +84,7 @@ theme.widget_weather = theme.confdir .. "/icons/temp.png"
 theme.widget_power   = theme.confdir .. "/icons/power.png"
 theme.widget_wifi    = theme.confdir .. "/icons/wifi.png"
 theme.widget_music   = theme.confdir .. "/icons/music.png"
+theme.widget_pause   = theme.confdir .. "/icons/pause.png"
 theme.widget_rss     = theme.confdir .. "/icons/rss.png"
 -- }}}
 

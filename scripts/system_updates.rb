@@ -7,5 +7,4 @@ filter_ignored = ignorepkg_string.split.inject("") do |s, pkg|
   s << %{ | grep -v "^#{pkg}\s"}
 end
 
-packages = `pacman -Qu #{filter_ignored} | wc -l`
-puts packages
+puts `pacman -Qu #{filter_ignored} | wc -l`

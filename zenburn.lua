@@ -9,6 +9,7 @@ theme.confdir       = awful.util.getdir("config")
 -- {{{ Styles
 theme.font      = "Profont 8"
 theme.statusbar_height = 14
+theme.widget_height = 12
 
 -- {{{ Colors
 theme.fg_normal = "#DCDCCC"

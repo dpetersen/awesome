@@ -50,7 +50,7 @@ end
 -- {{{ Wibox
 
 -- {{{ Widgets
-local textwidgets = {}
+local marginwidgets = {}
 
 -- {{{ Reusable separators
 local separator = widget({ type = "textbox" })
@@ -63,7 +63,7 @@ tiny_separator.text  = " "
 dateicon = widget({ type = "imagebox" })
 dateicon.image = image(beautiful.widget_date)
 datewidget = widget({ type = "textbox" })
-table.insert(textwidgets, datewidget)
+table.insert(marginwidgets, datewidget)
 vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %I:%M%P")
 -- }}}
 
@@ -71,7 +71,7 @@ vicious.register(datewidget, vicious.widgets.date, "%a %m/%d %I:%M%P")
 pacmanicon = widget({ type = "imagebox" })
 pacmanicon.image = image(beautiful.widget_pacman)
 pacmanwidget = widget({ type = "textbox" })
-table.insert(textwidgets, pacmanwidget)
+table.insert(marginwidgets, pacmanwidget)
 pacmanseparator = widget({ type = "textbox" })
 pacmanseparator.text  = "  "
 vicious.register(pacmanwidget, vicious.widgets.script, 
@@ -94,7 +94,7 @@ vicious.register(pacmanwidget, vicious.widgets.script,
 weathericon = widget({ type = "imagebox" })
 weathericon.image = image(beautiful.widget_weather)
 weatherwidget = widget({ type = "textbox" })
-table.insert(textwidgets, weatherwidget)
+table.insert(marginwidgets, weatherwidget)
 vicious.register(weatherwidget, vicious.widgets.weather, "${tempf}° ${sky}", 3600, airport_code)
 -- }}}
 
@@ -104,7 +104,7 @@ local upicon = widget({ type = "imagebox" })
 dnicon.image = image(beautiful.widget_net)
 upicon.image = image(beautiful.widget_netup)
 local netwidget = widget({ type = "textbox" })
-table.insert(textwidgets, netwidget)
+table.insert(marginwidgets, netwidget)
 vicious.register(netwidget, vicious.widgets.net,
   function(widget, args)
     local format_speed = function(max, s)
@@ -131,9 +131,9 @@ mailicon = widget({ type = "imagebox" })
 mailicon.image = image(beautiful.widget_mail)
 
 donpetersendotnetwidget = widget({ type = "textbox" })
-table.insert(textwidgets, donpetersendotnetwidget)
+table.insert(marginwidgets, donpetersendotnetwidget)
 milclandotcomwidget = widget({ type = "textbox" })
-table.insert(textwidgets, milclandotcomwidget)
+table.insert(marginwidgets, milclandotcomwidget)
 
 check_mail_widgets = function()
   if donpetersendotnet_unread == 0 and milclandotcomunread_unread == 0 then
@@ -173,7 +173,7 @@ googlereadericon.image = image(beautiful.widget_rss)
 googlereaderseparator = widget({ type = "textbox" })
 googlereaderseparator.text  = "  "
 googlereaderwidget = widget({ type = "textbox" })
-table.insert(textwidgets, googlereaderwidget)
+table.insert(marginwidgets, googlereaderwidget)
 vicious.register(googlereaderwidget, vicious.widgets.script,
   function(widget, args)
     local number = tonumber(args[1])
@@ -196,7 +196,7 @@ powerseparator.text  = "  "
 powericon = widget({ type = "imagebox" })
 powericon.image = image(beautiful.widget_power)
 powerwidget = widget({ type = "textbox" })
-table.insert(textwidgets, powerwidget)
+table.insert(marginwidgets, powerwidget)
 vicious.register(powerwidget, vicious.widgets.bat,
   function(widget, args)
     local on_battery = (args[1] == "-")
@@ -231,7 +231,7 @@ system_tray = widget({ type = "systray" })
 wifiicon = widget({ type = "imagebox" })
 wifiicon.image = image(beautiful.widget_wifi)
 wifiwidget = widget({ type = "textbox" })
-table.insert(textwidgets, wifiwidget)
+table.insert(marginwidgets, wifiwidget)
 vicious.register(wifiwidget, vicious.widgets.wifi, "${ssid}[${link}]", 33, "wlan0")
 -- }}}
 
@@ -240,11 +240,12 @@ mpdseparator = widget({ type = "textbox" })
 mpdseparator.text  = "  "
 mpdicon = widget({ type = "imagebox" })
 mpdwidget = widget({ type = "textbox" })
-table.insert(textwidgets, mpdwidget)
+table.insert(marginwidgets, mpdwidget)
 
 mpdprogressbar = awful.widget.progressbar()
+table.insert(marginwidgets, mpdprogressbar.widget)
 mpdprogressbar:set_width(4)
-mpdprogressbar:set_height(14)
+mpdprogressbar:set_height(beautiful.widget_height)
 mpdprogressbar:set_vertical(true)
 mpdprogressbar:set_background_color(beautiful.fg_off_widget)
 mpdprogressbar:set_border_color(nil)
@@ -277,9 +278,10 @@ vicious.register(mpdprogressbar, vicious.widgets.mpd_extended, "${percentage}")
 local volumeicon = widget({ type = "imagebox" })
 volumeicon.image = image(beautiful.widget_vol)
 local volumebar = awful.widget.progressbar()
+table.insert(marginwidgets, volumebar.widget)
 
 volumebar:set_width(4)
-volumebar:set_height(14)
+volumebar:set_height(beautiful.widget_height)
 volumebar:set_vertical(true)
 volumebar:set_background_color(beautiful.fg_off_widget)
 volumebar:set_border_color(nil)
@@ -297,8 +299,9 @@ cpuicon = widget({ type = "imagebox" })
 cpuicon.image = image(beautiful.widget_cpu)
 
 cpugraph  = awful.widget.graph()
-cpugraph:set_width(14)
-cpugraph:set_height(14)
+table.insert(marginwidgets, cpugraph.widget)
+cpugraph:set_width(beautiful.widget_height)
+cpugraph:set_height(beautiful.widget_height)
 cpugraph:set_background_color(beautiful.fg_off_widget)
 cpugraph:set_color(beautiful.fg_end_widget)
 cpugraph:set_gradient_angle(0)
@@ -309,8 +312,9 @@ vicious.register(cpugraph, vicious.widgets.cpu, "$1")
 
 -- {{{ Memory usage
 local membar = awful.widget.progressbar()
+table.insert(marginwidgets, membar.widget)
 membar:set_width(6)
-membar:set_height(14)
+membar:set_height(beautiful.widget_height)
 membar:set_vertical(true)
 membar:set_background_color(beautiful.fg_off_widget)
 membar:set_border_color(nil)
@@ -322,9 +326,9 @@ membar:set_gradient_colors({ beautiful.fg_widget,
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
 
--- {{{ Vertical margins for text widgets
-for i,w in ipairs(textwidgets) do
-  awful.widget.layout.margins[w] = { top = 1 }
+-- {{{ Margins
+for i,w in ipairs(marginwidgets) do
+  awful.widget.layout.margins[w] = { top = 1, bottom = 1 }
 end
 -- }}}
 -- }}}

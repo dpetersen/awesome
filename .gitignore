@@ -1,3 +1,4 @@
 *.swp
 vicious/donpetersendotnet.lua
 vicious/milclandotcom.lua
+scripts/unread_items.sh

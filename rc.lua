@@ -167,6 +167,29 @@ vicious.register(milclandotcomwidget, vicious.widgets.milclandotcom,
   end, 300)
 -- }}}
 
+-- {{{ Google Reader
+googlereadericon = widget({ type = "imagebox" })
+googlereadericon.image = image(beautiful.widget_rss)
+googlereaderseparator = widget({ type = "textbox" })
+googlereaderseparator.text  = "  "
+googlereaderwidget = widget({ type = "textbox" })
+table.insert(textwidgets, googlereaderwidget)
+vicious.register(googlereaderwidget, vicious.widgets.script,
+  function(widget, args)
+    local number = tonumber(args[1])
+    if number > 0 then
+      googlereadericon.visible = true
+      googlereaderwidget.visible = true
+      googlereaderseparator.visible = true
+      return number
+    else
+      googlereadericon.visible = false
+      googlereaderwidget.visible = false
+      googlereaderseparator.visible = false
+    end
+  end, 1777, "unread_items.sh")
+-- }}}
+
 -- {{{ Power
 powerseparator = widget({ type = "textbox" })
 powerseparator.text  = "  "
@@ -340,6 +363,7 @@ for s = 1, screen.count() do
       powericon, powerwidget, powerseparator,
       wifiicon, wifiwidget, separator,
       pacmanicon, pacmanwidget, pacmanseparator,
+      googlereadericon, googlereaderwidget, googlereaderseparator,
       mailicon, donpetersendotnetwidget,
       milclandotcomwidget, mailseparator,
       cpuicon, cpugraph, tiny_separator, membar, separator,

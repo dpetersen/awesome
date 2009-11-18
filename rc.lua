@@ -48,10 +48,9 @@ end
 -- }}}
 
 -- {{{ Wibox
-
--- {{{ Widgets
 local marginwidgets = {}
 
+-- {{{ Widgets
 -- {{{ Reusable separators
 local separator = widget({ type = "textbox" })
 separator.text  = "  "
@@ -325,12 +324,6 @@ membar:set_gradient_colors({ beautiful.fg_widget,
 
 vicious.register(membar, vicious.widgets.mem, "$1", 13)
 -- }}}
-
--- {{{ Margins
-for i,w in ipairs(marginwidgets) do
-  awful.widget.layout.margins[w] = { top = 1, bottom = 1 }
-end
--- }}}
 -- }}}
 
 topwibox = {}
@@ -343,7 +336,10 @@ taglist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
   taglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist.buttons)
+  table.insert(marginwidgets, taglist[s])
+
   promptbox[s] = awful.widget.prompt()
+  table.insert(marginwidgets, promptbox[s])
 
   layoutbox[s] = awful.widget.layoutbox(s)
   layoutbox[s]:buttons(awful.util.table.join(
@@ -382,6 +378,12 @@ for s = 1, screen.count() do
     layout = awful.widget.layout.horizontal.leftright
   }
 end
+
+-- {{{ Widget Margins
+for i,w in ipairs(marginwidgets) do
+  awful.widget.layout.margins[w] = { top = 1, bottom = 1 }
+end
+-- }}}
 -- }}}
 
 -- {{{ Key bindings

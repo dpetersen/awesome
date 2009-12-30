@@ -18,7 +18,7 @@ per_screen_tags[2] = { "misc", "dev" }
 
 -- This is used later as the default terminal and editor to run.
 terminal = "terminal"
-browser = "uzbl"
+browser = "google-chrome"
 editor = "vim"
 
 airport_code = "KATW"
